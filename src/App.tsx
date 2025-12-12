@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import SimpleLanding from './components/SimpleLanding';
 import RiddleGame from './components/PuzzleGame';
@@ -7,6 +7,14 @@ type Section = 'landing' | 'memory' | 'wishes' | 'game' | 'letter';
 
 function App() {
   const [currentSection, setCurrentSection] = useState<Section>('landing');
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const checkMobile = () => setIsMobile(window.innerWidth < 768);
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
 
   const handleNext = (nextSection: Section) => {
     setCurrentSection(nextSection);
@@ -139,10 +147,10 @@ function App() {
 
             {/* Floating Memory Images with Premium Circular Frames */}
             {[
-              { src: '/memories/memory1.jpg', x: '15%', y: '20%', delay: 0 },
-              { src: '/memories/memory2.jpg', x: '75%', y: '25%', delay: 1 },
-              { src: '/memories/memory3.jpg', x: '20%', y: '65%', delay: 2 },
-              { src: '/memories/memory4.jpg', x: '80%', y: '70%', delay: 3 }
+              { src: '/memories/memory1.jpg', x: isMobile ? '10%' : '15%', y: isMobile ? '15%' : '20%', delay: 0 },
+              { src: '/memories/memory2.jpg', x: isMobile ? '65%' : '75%', y: isMobile ? '20%' : '25%', delay: 1 },
+              { src: '/memories/memory3.jpg', x: isMobile ? '15%' : '20%', y: isMobile ? '60%' : '65%', delay: 2 },
+              { src: '/memories/memory4.jpg', x: isMobile ? '70%' : '80%', y: isMobile ? '65%' : '70%', delay: 3 }
             ].map((item, i) => (
               <motion.div
                 key={i}
@@ -188,8 +196,8 @@ function App() {
                 }}>
                   {/* Image Container */}
                   <div style={{
-                    width: 'clamp(130px, 22vw, 200px)',
-                    height: 'clamp(130px, 22vw, 200px)',
+                    width: 'clamp(90px, 20vw, 200px)', // Smaller minimum size for mobile
+                    height: 'clamp(90px, 20vw, 200px)',
                     borderRadius: '50%',
                     overflow: 'hidden',
                     border: '4px solid white',
@@ -525,13 +533,15 @@ function App() {
                   lineHeight: '1.8',
                   marginBottom: '2.5rem',
                   background: 'rgba(255, 255, 255, 0.6)', // Slightly more opaque for better readability
-                  padding: '3rem',
+                  padding: 'clamp(1.5rem, 5vw, 3rem)', // Responsive padding
                   borderRadius: '30px',
                   backdropFilter: 'blur(20px)',
                   border: '2px solid rgba(255, 255, 255, 0.6)',
                   boxShadow: '0 25px 50px rgba(0,0,0,0.15)',
                   fontFamily: "'Outfit', sans-serif", // Use the premium font
-                  color: '#4a4a4a'
+                  color: '#4a4a4a',
+                  maxHeight: '70vh', // Prevent scrolling issues on small screens
+                  overflowY: 'auto' // Allow scrolling within letter if needed
                 }}
               >
                 <p style={{ marginBottom: '2rem', fontSize: '1.8rem', fontStyle: 'italic', fontFamily: "'Playfair Display', serif", color: '#d63384' }}>
