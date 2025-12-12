@@ -147,10 +147,11 @@ function App() {
 
             {/* Floating Memory Images with Premium Circular Frames */}
             {[
-              { src: '/memories/memory1.jpg', x: isMobile ? '10%' : '15%', y: isMobile ? '15%' : '20%', delay: 0 },
-              { src: '/memories/memory2.jpg', x: isMobile ? '65%' : '75%', y: isMobile ? '20%' : '25%', delay: 1 },
-              { src: '/memories/memory3.jpg', x: isMobile ? '15%' : '20%', y: isMobile ? '60%' : '65%', delay: 2 },
-              { src: '/memories/memory4.jpg', x: isMobile ? '70%' : '80%', y: isMobile ? '65%' : '70%', delay: 3 }
+              // Mobile: Push to extreme corners. Desktop: Keep balanced.
+              { src: '/memories/memory1.jpg', x: isMobile ? '2%' : '15%', y: isMobile ? '5%' : '20%', delay: 0 },
+              { src: '/memories/memory2.jpg', x: isMobile ? '70%' : '75%', y: isMobile ? '8%' : '25%', delay: 1 },
+              { src: '/memories/memory3.jpg', x: isMobile ? '5%' : '20%', y: isMobile ? '75%' : '65%', delay: 2 },
+              { src: '/memories/memory4.jpg', x: isMobile ? '72%' : '80%', y: isMobile ? '80%' : '70%', delay: 3 }
             ].map((item, i) => (
               <motion.div
                 key={i}
@@ -162,7 +163,7 @@ function App() {
                   willChange: 'transform'
                 }}
                 animate={{
-                  y: [0, -20, 0],
+                  y: [0, -15, 0], // Reduced movement on mobile to prevent overlapping
                   rotate: [0, i % 2 === 0 ? 3 : -3, 0],
                 }}
                 transition={{
@@ -177,7 +178,7 @@ function App() {
                 <motion.div
                   style={{
                     position: 'absolute',
-                    inset: '-12px',
+                    inset: '-8px', // Slightly smaller ring on mobile
                     borderRadius: '50%',
                     border: '2px dashed rgba(255, 255, 255, 0.6)',
                     zIndex: -1
@@ -188,7 +189,7 @@ function App() {
 
                 {/* Inner Glowing Ring */}
                 <div style={{
-                  padding: '6px',
+                  padding: '4px',
                   background: 'rgba(255, 255, 255, 0.3)',
                   backdropFilter: 'blur(5px)',
                   borderRadius: '50%',
@@ -196,11 +197,11 @@ function App() {
                 }}>
                   {/* Image Container */}
                   <div style={{
-                    width: 'clamp(90px, 20vw, 200px)', // Smaller minimum size for mobile
-                    height: 'clamp(90px, 20vw, 200px)',
+                    width: 'clamp(80px, 18vw, 180px)', // Even smaller min size for mobile
+                    height: 'clamp(80px, 18vw, 180px)',
                     borderRadius: '50%',
                     overflow: 'hidden',
-                    border: '4px solid white',
+                    border: '3px solid white',
                     position: 'relative'
                   }}>
                     <img
@@ -210,10 +211,9 @@ function App() {
                         width: '100%',
                         height: '100%',
                         objectFit: 'cover',
-                        transform: 'scale(1.05)' // Slight zoom to avoid white edges
+                        transform: 'scale(1.05)'
                       }}
                     />
-                    {/* Shine effect */}
                     <div style={{
                       position: 'absolute',
                       top: 0,
@@ -228,21 +228,21 @@ function App() {
               </motion.div>
             ))}
 
-            {/* Decorative emojis */}
+            {/* Decorative emojis - Reduced size on mobile */}
             {['📸', '💭', '❤️', '🌟', '📖', '🎈'].map((emoji, i) => (
               <motion.div
                 key={emoji + i}
                 style={{
                   position: 'absolute',
-                  fontSize: '2.5rem',
+                  fontSize: 'clamp(1.5rem, 4vw, 2.5rem)', // Responsive emoji size
                   left: `${Math.random() * 90 + 5}%`,
                   top: `${Math.random() * 90 + 5}%`,
                   zIndex: 1
                 }}
                 animate={{
-                  y: [0, -50, 0],
+                  y: [0, -30, 0],
                   rotate: [0, 360],
-                  scale: [1, 1.5, 1],
+                  scale: [1, 1.2, 1],
                 }}
                 transition={{
                   duration: 6 + Math.random() * 2,
@@ -255,7 +255,16 @@ function App() {
               </motion.div>
             ))}
 
-            <div style={{ position: 'relative', zIndex: 10 }}>
+            <div style={{
+              position: 'relative',
+              zIndex: 10,
+              // Add a subtle background on mobile to ensure text readability if overlap happens
+              background: isMobile ? 'rgba(0, 0, 0, 0.2)' : 'transparent',
+              padding: '20px',
+              borderRadius: '20px',
+              backdropFilter: isMobile ? 'blur(5px)' : 'none',
+              maxWidth: '95vw'
+            }}>
               <motion.h2
                 initial={{ y: -50, opacity: 0 }}
                 animate={{
@@ -265,19 +274,18 @@ function App() {
                 }}
                 style={{
                   fontFamily: "'Playfair Display', serif",
-                  fontSize: 'clamp(2.5rem, 8vw, 4.5rem)', // Responsive font size
+                  fontSize: 'clamp(2.5rem, 8vw, 4.5rem)',
                   lineHeight: 1.1,
-                  marginBottom: '1.5rem',
+                  marginBottom: '1rem',
                   background: 'linear-gradient(to right, #fff, #e0c3fc, #fff)',
                   backgroundSize: '200% auto',
                   WebkitBackgroundClip: 'text',
                   WebkitTextFillColor: 'transparent',
                   filter: 'drop-shadow(0 0 15px rgba(255,255,255,0.3))',
                   fontWeight: 700,
-                  maxWidth: '90vw', // Prevent overflow
+                  maxWidth: '100%',
                   marginLeft: 'auto',
                   marginRight: 'auto',
-                  padding: '0 1rem' // Add padding for smaller screens
                 }}
                 transition={{
                   duration: 3,
@@ -295,11 +303,12 @@ function App() {
                 transition={{ delay: 0.3 }}
                 style={{
                   fontFamily: "'Outfit', sans-serif",
-                  fontSize: '1.5rem',
-                  marginBottom: '2.5rem',
+                  fontSize: 'clamp(1rem, 4vw, 1.5rem)', // Responsive text size
+                  marginBottom: '2rem',
                   letterSpacing: '2px',
                   textTransform: 'uppercase',
-                  color: 'rgba(255,255,255,0.9)'
+                  color: 'rgba(255,255,255,0.95)',
+                  textShadow: '0 2px 4px rgba(0,0,0,0.3)' // Better contrast
                 }}
               >
                 Cherishing every moment with you
@@ -308,6 +317,11 @@ function App() {
                 initial={{ scale: 0 }}
                 animate={{ scale: 1 }}
                 transition={{ delay: 0.6 }}
+                style={{
+                  display: 'flex',
+                  justifyContent: 'center',
+                  width: '100%'
+                }}
               >
                 <EnhancedButton onClick={() => handleNext('wishes')} color="#667eea">
                   Next: Birthday Wishes 🎂
